@@ -18,6 +18,8 @@ public class BankSimulation {
 
     public static int customersServed = 0;
 
+    public static Semaphore safe = new Semaphore(2);
+
     static {
         for (int i = 0; i < NUM_TELLERS; i++) {
             customerReady[i] = new Semaphore(0);

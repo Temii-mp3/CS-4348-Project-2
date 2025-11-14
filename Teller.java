@@ -1,7 +1,8 @@
-import java.util.concurrent.Semaphore;
+import java.util.Random;
 
 public class Teller implements Runnable {
     private int id;
+    private Random random = new Random();
 
     public Teller(int id) {
         this.id = id;
@@ -42,8 +43,15 @@ public class Teller implements Runnable {
                 String transaction = BankSimulation.transactionType[id];
                 System.out.println("Teller " + id + " [Customer " + customerId + "]: receives " + transaction + " transaction");
 
-                System.out.println("Teller " + id + " [Customer " + customerId + "]: processes transaction");
-                Thread.sleep(200);
+                System.out.println("Teller " + id + " [Customer " + customerId + "]: going to safe");
+                BankSimulation.safe.acquire();
+                System.out.println("Teller " + id + " [Customer " + customerId + "]: in safe");
+
+                int sleepTime = random.nextInt(41) + 10;
+                Thread.sleep(sleepTime);
+
+                System.out.println("Teller " + id + " [Customer " + customerId + "]: done with safe");
+                BankSimulation.safe.release();
 
                 System.out.println("Teller " + id + " [Customer " + customerId + "]: transaction complete");
                 BankSimulation.transactionComplete[id].release();
