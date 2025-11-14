@@ -11,23 +11,48 @@ public class Teller implements Runnable {
     public void run() {
         System.out.println("Teller " + id + " [Teller " + id + "]: arrives at work");
 
-
         try {
-            BankSimulation.mutex.acquire(); // Lock
+            BankSimulation.mutex.acquire();
             BankSimulation.tellerReady[id] = true;
             System.out.println("Teller " + id + " [Teller " + id + "]: ready to serve");
-            BankSimulation.availableTellers.release(); // Signal that this teller is available
-            BankSimulation.mutex.release(); // Unlock
+            BankSimulation.availableTellers.release();
+            BankSimulation.mutex.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < BankSimulation.NUM_CUSTOMERS / BankSimulation.NUM_TELLERS + 1; i++) {
+        while (true) {
             try {
-                Thread.sleep(500);
+                BankSimulation.mutex.acquire();
+                if (BankSimulation.customersServed >= BankSimulation.NUM_CUSTOMERS) {
+                    BankSimulation.mutex.release();
+                    break;
+                }
+                BankSimulation.mutex.release();
+
+                BankSimulation.customerReady[id].acquire();
+
+                int customerId = BankSimulation.customerAtTeller[id];
+                System.out.println("Teller " + id + " [Customer " + customerId + "]: greets customer");
+
+                System.out.println("Teller " + id + " [Customer " + customerId + "]: asks for transaction");
+                BankSimulation.tellerAsksTransaction[id].release();
+
+                BankSimulation.customerProvidesTransaction[id].acquire();
+                String transaction = BankSimulation.transactionType[id];
+                System.out.println("Teller " + id + " [Customer " + customerId + "]: receives " + transaction + " transaction");
+
+                System.out.println("Teller " + id + " [Customer " + customerId + "]: processes transaction");
+                Thread.sleep(200);
+
+                System.out.println("Teller " + id + " [Customer " + customerId + "]: transaction complete");
+                BankSimulation.transactionComplete[id].release();
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
+        System.out.println("Teller " + id + " [Teller " + id + "]: going home");
     }
 }
