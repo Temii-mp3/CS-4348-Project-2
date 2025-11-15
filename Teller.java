@@ -43,6 +43,18 @@ public class Teller implements Runnable {
                 String transaction = BankSimulation.transactionType[id];
                 System.out.println("Teller " + id + " [Customer " + customerId + "]: receives " + transaction + " transaction");
 
+                if (transaction.equals("WITHDRAW")) {
+                    System.out.println("Teller " + id + " [Customer " + customerId + "]: going to manager");
+                    BankSimulation.manager.acquire();
+                    System.out.println("Teller " + id + " [Customer " + customerId + "]: with manager");
+
+                    int managerTime = random.nextInt(26) + 5;
+                    Thread.sleep(managerTime);
+
+                    System.out.println("Teller " + id + " [Customer " + customerId + "]: done with manager");
+                    BankSimulation.manager.release();
+                }
+
                 System.out.println("Teller " + id + " [Customer " + customerId + "]: going to safe");
                 BankSimulation.safe.acquire();
                 System.out.println("Teller " + id + " [Customer " + customerId + "]: in safe");
