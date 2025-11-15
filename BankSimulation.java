@@ -20,6 +20,7 @@ public class BankSimulation {
 
     public static Semaphore safe = new Semaphore(2);
     public static Semaphore manager = new Semaphore(1);
+    public static Semaphore door = new Semaphore(2);
 
     static {
         for (int i = 0; i < NUM_TELLERS; i++) {

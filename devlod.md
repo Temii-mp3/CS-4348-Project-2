@@ -27,3 +27,12 @@ Nov 14 1:58 PM
 I have time to work on the project so the plan this sessiion is to continue building on what we have already so far we have the cutsomers and the tellers being in sync (1 customer per teller) and we have the deposit/withdraw finctionality working, the next thing i want to add is the safe, so there are only 2 tellers allowed to enter the safe, i will mirror this using java code. I have implemented the safe feature now so the safe is limited to only 2 tellers at a time. The next step will be to add the manager.
 Nov 14 6:35 PM
 I have added the manager semaphore to the program so now there is a manager that the tellers have to meet before going to the safe. The next step is to implement the door.  
+I have implemented the door, so now only two customers are allowed into the bank. This is possible using a semaphore with 2 permits. in the next step, i will polish up the program and increase the count to 50 customers but that will be for another session.
+In this session, I:
+completed last session goals
+added deposit/withdraw functionality
+added safe functionality
+added manager functionality
+added door functionality
+The project is basically complete but i will go through and not any logical errors i might have in the code.
+

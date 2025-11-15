@@ -17,7 +17,9 @@ public class Customer implements Runnable {
 
             Thread.sleep((int)(Math.random() * 100));
 
+            BankSimulation.door.acquire();
             System.out.println("Customer " + id + " [Customer " + id + "]: enters the bank");
+            BankSimulation.door.release();
 
             BankSimulation.availableTellers.acquire();
 
@@ -51,7 +53,9 @@ public class Customer implements Runnable {
             BankSimulation.transactionComplete[myTeller].acquire();
             System.out.println("Customer " + id + " [Teller " + myTeller + "]: thanks teller");
 
+            BankSimulation.door.acquire();
             System.out.println("Customer " + id + " [Customer " + id + "]: leaves the bank");
+            BankSimulation.door.release();
 
             BankSimulation.mutex.acquire();
             BankSimulation.tellerReady[myTeller] = true;
