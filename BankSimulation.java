@@ -2,7 +2,7 @@ import java.util.concurrent.Semaphore;
 
 public class BankSimulation {
     public static final int NUM_TELLERS = 3;
-    public static final int NUM_CUSTOMERS = 5;
+    public static final int NUM_CUSTOMERS = 50;
 
     public static Semaphore availableTellers = new Semaphore(0);
     public static boolean[] tellerReady = new boolean[NUM_TELLERS];
@@ -21,6 +21,8 @@ public class BankSimulation {
     public static Semaphore safe = new Semaphore(2);
     public static Semaphore manager = new Semaphore(1);
     public static Semaphore door = new Semaphore(2);
+    public static Semaphore printMutex = new Semaphore(1);
+
 
     static {
         for (int i = 0; i < NUM_TELLERS; i++) {
@@ -63,7 +65,14 @@ public class BankSimulation {
             }
         }
 
+        for (int i = 0; i < NUM_TELLERS; i++) {
+            try {
+                tellers[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         System.out.println("\nAll customers served. Bank is closing.");
     }
-
 }
